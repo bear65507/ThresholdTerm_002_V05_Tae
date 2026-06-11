@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/text_library_activity_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="프로필 정보"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="도서관 검색 Activity"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_library_activity_region"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#F2F7F5"
+            android:padding="14dp"
+            android:text="지역 기반 도서관을 불러옵니다."
+            android:textColor="#173B33"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/text_library_activity_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:lineSpacingExtra="4dp"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/button_library_activity_open_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="첫 번째 도서관 지도 열기" />
+    </LinearLayout>
+</ScrollView>

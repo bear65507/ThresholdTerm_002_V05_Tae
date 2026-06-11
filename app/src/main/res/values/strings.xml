@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Focus Library</string>
+    <string name="title_home">타이머</string>
+    <string name="title_dashboard">기록</string>
+    <string name="title_notifications">도서관</string>
+    <string name="title_settings">설정</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_LibraryLocation">도서관 찾기</string>
+    <string name="title_SATArchive">기출문제</string>
+    <string name="profile_setup_title">처음 시작하기</string>
+    <string name="profile_setup_description">사는 지역과 학생 신분을 저장해두고 앱을 시작합니다.</string>
+    <string name="profile_sido_hint">시/도</string>
+    <string name="profile_sigungu_hint">시/군/구</string>
+    <string name="profile_eup_myeon_dong_hint">읍/면/동</string>
+    <string name="profile_student_status_hint">학생 신분</string>
+    <string name="profile_save_button">저장하고 시작</string>
+    <string name="profile_required_message">시/도, 시/군/구, 읍/면/동, 학생 신분을 모두 입력해주세요.</string>
+    <string name="profile_setup_actionbar_title">시작 설정</string>
+
+    <string-array name="profile_sido_options">
+        <item>서울특별시</item>
+        <item>부산광역시</item>
+        <item>대구광역시</item>
+        <item>인천광역시</item>
+        <item>광주광역시</item>
+        <item>대전광역시</item>
+        <item>울산광역시</item>
+        <item>세종특별자치시</item>
+        <item>경기도</item>
+        <item>강원특별자치도</item>
+        <item>충청북도</item>
+        <item>충청남도</item>
+        <item>전북특별자치도</item>
+        <item>전라남도</item>
+        <item>경상북도</item>
+        <item>경상남도</item>
+        <item>제주특별자치도</item>
+    </string-array>
+
+    <string-array name="profile_student_status_options">
+        <item>초등학생</item>
+        <item>중학생</item>
+        <item>고등학생</item>
+        <item>대학생</item>
+        <item>수험생</item>
+        <item>기타</item>
+    </string-array>
+</resources>
