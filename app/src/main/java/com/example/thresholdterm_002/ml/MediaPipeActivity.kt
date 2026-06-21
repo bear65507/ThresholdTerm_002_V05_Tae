@@ -214,7 +214,6 @@ class MediaPipeActivity : AppCompatActivity() {
         leftShoulderLandmark?.let { parsedLandmarks.add(PoseLandmark("left_shoulder", it.x(), it.y(), it.presence().orElse(1.0f))) }
         rightShoulderLandmark?.let { parsedLandmarks.add(PoseLandmark("right_shoulder", it.x(), it.y(), it.presence().orElse(1.0f))) }
 
-        // 수정된 완화 공식이 들어있는 analyzer 호출
         val feedback = postureAnalyzer.analyzeMediaPipeLandmarks(parsedLandmarks, false)
 
         runOnUiThread {

@@ -16,6 +16,7 @@ import com.example.thresholdterm_002.data.local.ProfileStore
 import com.example.thresholdterm_002.data.local.UserProfile
 import com.example.thresholdterm_002.databinding.ActivityMainBinding
 import com.example.thresholdterm_002.ui.ActivityLauncher
+import com.example.thresholdterm_002.ui.exam.ExamDownloadActivity
 import com.example.thresholdterm_002.ui.library.LibraryActivity
 import com.example.thresholdterm_002.ui.stats.StatsActivity
 import com.example.thresholdterm_002.ml.MediaPipeActivity
@@ -103,6 +104,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.buttonMainLibrary.setOnClickListener {
             startActivity(ActivityLauncher.createIntent(this, LibraryActivity::class.java, "메인 허브"))
+        }
+        binding.buttonMainExamDownload.setOnClickListener {
+            startActivity(ActivityLauncher.createIntent(this, ExamDownloadActivity::class.java, "메인 허브"))
         }
         binding.buttonMainEditProfile.setOnClickListener {
             showProfileSetup()

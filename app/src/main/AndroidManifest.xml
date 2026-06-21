@@ -56,6 +56,11 @@
             android:label="도서관 검색" />
 
         <activity
+            android:name=".ui.exam.ExamDownloadActivity"
+            android:exported="false"
+            android:label="기출문제 다운로드" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">

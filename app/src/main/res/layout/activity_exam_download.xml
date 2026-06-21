@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/exam_download_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/text_exam_download_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="프로필 정보"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="기출문제 다운로드"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_exam_download_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="#F2F7F5"
+            android:lineSpacingExtra="4dp"
+            android:padding="14dp"
+            android:text="1994학년도 이후 KICE 공식 기출문제 다운로드 버튼을 불러옵니다."
+            android:textColor="#173B33"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/button_load_old_suneung_catalog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="1994~2004학년도 수능 기출 버튼 불러오기" />
+
+        <Button
+            android:id="@+id/button_load_recent_suneung_catalog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="2005학년도 이후 수능 기출 버튼 불러오기" />
+
+        <Button
+            android:id="@+id/button_load_mock_catalog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="수능 모의평가 기출 버튼 불러오기" />
+
+        <LinearLayout
+            android:id="@+id/old_suneung_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/recent_suneung_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/mock_exam_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" />
+    </LinearLayout>
+</ScrollView>

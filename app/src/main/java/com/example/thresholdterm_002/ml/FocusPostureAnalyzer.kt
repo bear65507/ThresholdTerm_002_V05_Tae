@@ -30,8 +30,7 @@ class FocusPostureAnalyzer {
         return formatFeedback(finalScore)
     }
 
-    /**
-     * [조건이 대폭 엄격해진 AI 집중도 산출식]
+    /*
      * 1. 얼굴 및 상체 핵심 랜드마크(코, 양쪽 어깨) 중 하나라도 손실되면 즉시 대폭 감점 (-40점)
      * 2. 고개 들기(Head Up) 감지 임계값을 현실적인 수치(0.02)로 낮추고 페널티 가중치 강화
      * 3. 어깨 기울기 및 스마트폰 감지 결합
@@ -41,8 +40,6 @@ class FocusPostureAnalyzer {
         val leftShoulder = landmarks.firstOrNull { it.name == "left_shoulder" }
         val rightShoulder = landmarks.firstOrNull { it.name == "right_shoulder" }
 
-        // [수정 1] 얼굴 전체 및 상체 안정을 파악하기 위해 핵심 3개 점이 모두 높은 신뢰도로 잡히는지 엄격하게 검사
-        // 하나라도 카메라 밖으로 나가거나 잘리면 화면 이탈로 간주합니다.
         val minConfidence = 0.75f
         val isBodyFullyDetected = (nose != null && nose.visibility > minConfidence) &&
                 (leftShoulder != null && leftShoulder.visibility > minConfidence) &&
@@ -50,12 +47,11 @@ class FocusPostureAnalyzer {
 
         var score = 100
 
-        // 스마트폰 감지 시 페널티
         if (phoneDetected) {
             score -= 35
         }
 
-        // [수정 2] 카메라에 얼굴 전체나 상체가 온전히 나오지 않으면 가차 없이 -40점 감점 (최대 60점 제한)
+        // 카메라에 얼굴 전체나 상체가 온전히 나오지 않으면 가차 없이 -40점 감점 (최대 60점 제한)
         if (!isBodyFullyDetected) {
             score -= 40
             return formatFeedback(score.coerceIn(0, 100))
@@ -71,21 +67,16 @@ class FocusPostureAnalyzer {
             // 어깨선 평균 높이 계산
             val avgShoulderY = (leftShoulder.y + rightShoulder.y) / 2f
 
-            // 정면을 바라볼 때의 표준적인 '어깨-코' 간격 (보통 0.20 ~ 0.22 내외)
             val expectedNormalNoseY = avgShoulderY - 0.21f
 
-            // 현재 코의 위치와 기준점의 차이 (위로 가거나 아래로 가거나)
             val noseOffset = nose.y - expectedNormalNoseY
 
-            // [수정 3] 고개 들기(Head Up) 감지 감도 및 패널티 정밀 조정
-            // 정면 기준선보다 코가 조금이라도 위로 들리면(Y값이 작아지면, 즉 오프셋이 마이너스) 즉각 반응하도록 변경
+            // 고개 들기(Head Up) 감지 감도 및 패널티 정밀 조정
             if (noseOffset < -0.02f) {
-                // 고개를 위나 뒤로 젖힌 상태: 미세한 스케일 변화(0.02 ~ 0.08)에 민감하게 반응하도록 가중치를 250으로 대폭 상향
-                // 고개를 조금만 들어도 최소 10점~25점까지 확실하게 깎이도록 설계
                 val headUpPenalty = (abs(noseOffset) * 250).toInt().coerceIn(10, 25)
                 score -= headUpPenalty
             }
-            // 고개를 아래로 숙였을 때 (오프셋이 플러스)
+            // 고개를 아래로 숙였을 때
             else if (noseOffset > 0.03f) {
                 val headDown = noseOffset.coerceIn(0f, 1f)
                 val rawHeadDownPenalty = (headDown * 30).toInt()

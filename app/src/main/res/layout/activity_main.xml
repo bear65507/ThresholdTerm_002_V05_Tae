@@ -96,6 +96,13 @@
                 android:text="내 지역 도서관 찾기" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_main_exam_download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="수능·모의평가 기출문제 다운로드" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_main_edit_profile"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
