@@ -98,7 +98,6 @@ class SettingsFragment : Fragment() {
         if (
             profile.sido.isBlank() ||
             profile.sigungu.isBlank() ||
-            profile.eupMyeonDong.isBlank() ||
             profile.studentStatus.isBlank()
         ) {
             Toast.makeText(requireContext(), R.string.profile_required_message, Toast.LENGTH_SHORT).show()

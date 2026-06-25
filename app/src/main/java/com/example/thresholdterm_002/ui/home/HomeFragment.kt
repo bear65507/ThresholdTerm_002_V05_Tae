@@ -57,6 +57,9 @@ class HomeFragment : Fragment() {
         binding.buttonPause.setOnClickListener {
             homeViewModel.pauseFocusSession()
         }
+        binding.buttonSaveStop.setOnClickListener {
+            homeViewModel.stopAndSaveFocusSession()
+        }
         binding.buttonReset.setOnClickListener {
             homeViewModel.resetFocusSession()
         }

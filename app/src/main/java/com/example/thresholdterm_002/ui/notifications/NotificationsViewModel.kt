@@ -20,12 +20,30 @@ class NotificationsViewModel : ViewModel() {
 
     private val _regionText = MutableLiveData("저장된 지역 정보를 불러오고 있습니다.")
     val regionText: LiveData<String> = _regionText
+    private var latestSearchId = 0
 
     fun loadLibraries(profile: UserProfile?) {
         _regionText.value = profile?.let {
-            "${it.regionLabel} 주변 도서관을 보여주는 중입니다."
-        } ?: "지역 설정이 없어 기본 추천 도서관을 보여줍니다."
-        _libraries.value = repository.getRecommendedLibraries(profile)
+            "${it.regionLabel} 기준 카카오 지도 API에서 도서관을 검색 중입니다."
+        } ?: "지역 설정이 없어 카카오 지도 API에서 도서관을 검색 중입니다."
+
+        val searchId = ++latestSearchId
+        Thread {
+            val result = repository.getRecommendedLibraries(profile)
+            val errorMessage = repository.getLibrarySearchError()
+            if (searchId == latestSearchId) {
+                _libraries.postValue(result)
+                _regionText.postValue(
+                    if (result.isEmpty()) {
+                        errorMessage ?: "검색 결과가 없습니다. 네트워크 연결과 카카오 REST API 키를 확인해 주세요."
+                    } else {
+                        profile?.let {
+                            "${it.regionLabel} 기준 카카오 지도 API 도서관 검색 결과입니다."
+                        } ?: "카카오 지도 API 도서관 검색 결과입니다."
+                    }
+                )
+            }
+        }.start()
     }
 
     fun runSampleFocusCheck() {

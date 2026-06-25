@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.thresholdterm_002.data.model.FocusFeedback
 import com.example.thresholdterm_002.ml.FocusSignal
 import com.example.thresholdterm_002.repository.StudyRepository
 import kotlinx.coroutines.Job
@@ -24,6 +25,7 @@ class HomeViewModel : ViewModel() {
     private var selectedMinutes = 25
     private var remainingMillis = selectedMinutes * MILLIS_PER_MINUTE
     private var running = false
+    private var paused = false
     private var focusScoreSum = 0
     private var focusCheckCount = 0
 
@@ -46,28 +48,33 @@ class HomeViewModel : ViewModel() {
         if (running) return
         selectedMinutes = minutes
         remainingMillis = minutes * MILLIS_PER_MINUTE
+        paused = false
         _timerText.value = formatTime(remainingMillis)
         _selectedMinutesText.value = "${selectedMinutes}분 집중"
         _statusText.value = "집중 시간을 ${minutes}분으로 설정했습니다."
     }
 
-    fun startFocusSession(minutes: Int = selectedMinutes) {
+    fun startFocusSession(minutes: Int = selectedMinutes, useSampleFocusChecks: Boolean = true) {
         if (running) return
         selectedMinutes = minutes
         remainingMillis = if (remainingMillis <= 0L) minutes * MILLIS_PER_MINUTE else remainingMillis
+        val resuming = paused
         running = true
-        focusScoreSum = 0
-        focusCheckCount = 0
+        paused = false
+        if (!resuming) {
+            focusScoreSum = 0
+            focusCheckCount = 0
+        }
         _statusText.value = "집중 중입니다. 다른 앱은 잠시 멀리 두세요."
         _focusInsightText.value = "AI 집중 감지 작동 중: 얼굴 방향과 어깨 균형을 확인합니다."
 
-        focusCheckJob = viewModelScope.launch {
-            while (isActive) {
-                val feedback = repository.checkFocus(createSampleFocusSignal())
-                focusScoreSum += feedback.score
-                focusCheckCount += 1
-                _focusInsightText.value = "${feedback.title} (${feedback.score}점)\n${feedback.message}"
-                delay(FOCUS_CHECK_INTERVAL_MILLIS)
+        if (useSampleFocusChecks) {
+            focusCheckJob = viewModelScope.launch {
+                while (isActive) {
+                    val feedback = repository.checkFocus(createSampleFocusSignal())
+                    recordAiFocusFeedback(feedback)
+                    delay(FOCUS_CHECK_INTERVAL_MILLIS)
+                }
             }
         }
 
@@ -78,14 +85,34 @@ class HomeViewModel : ViewModel() {
                 _timerText.value = formatTime(remainingMillis)
             }
 
-            completeFocusSession()
+            completeFocusSession(selectedMinutes)
         }
+    }
+
+    fun stopAndSaveFocusSession(): Boolean {
+        if (!running) return false
+
+        timerJob?.cancel()
+        val elapsedMillis = (selectedMinutes * MILLIS_PER_MINUTE - remainingMillis).coerceAtLeast(0L)
+        val elapsedMinutes = ((elapsedMillis + MILLIS_PER_MINUTE - 1L) / MILLIS_PER_MINUTE).toInt()
+        if (elapsedMinutes <= 0) {
+            focusCheckJob?.cancel()
+            running = false
+            paused = false
+            _statusText.value = "저장할 공부 시간이 아직 없습니다."
+            _focusInsightText.value = "타이머를 시작한 뒤 저장 종료를 누르면 공부 시간이 저장됩니다."
+            return false
+        }
+
+        completeFocusSession(elapsedMinutes)
+        return true
     }
 
     fun pauseFocusSession() {
         timerJob?.cancel()
         focusCheckJob?.cancel()
         running = false
+        paused = true
         _statusText.value = "일시정지되었습니다. 준비되면 다시 시작하세요."
         _focusInsightText.value = "AI 집중 감지가 잠시 멈췄습니다."
     }
@@ -94,6 +121,7 @@ class HomeViewModel : ViewModel() {
         timerJob?.cancel()
         focusCheckJob?.cancel()
         running = false
+        paused = false
         selectedMinutes = minutes
         remainingMillis = minutes * MILLIS_PER_MINUTE
         _timerText.value = formatTime(remainingMillis)
@@ -102,26 +130,34 @@ class HomeViewModel : ViewModel() {
         _focusInsightText.value = "타이머를 켜면 시선과 자세 분석이 함께 시작됩니다."
     }
 
+    fun recordAiFocusFeedback(feedback: FocusFeedback) {
+        if (!running) return
+        focusScoreSum += feedback.score
+        focusCheckCount += 1
+        _focusInsightText.value = "${feedback.title} (${feedback.score}점)\n${feedback.message}"
+    }
+
     override fun onCleared() {
         timerJob?.cancel()
         focusCheckJob?.cancel()
         super.onCleared()
     }
 
-    private fun completeFocusSession() {
+    private fun completeFocusSession(durationMinutes: Int) {
         focusCheckJob?.cancel()
         running = false
+        paused = false
         remainingMillis = 0L
         val averageFocusScore = if (focusCheckCount == 0) 90 else focusScoreSum / focusCheckCount
         _timerText.value = "00:00"
         repository.saveStudySession(
-            durationMinutes = selectedMinutes,
+            durationMinutes = durationMinutes,
             focusScore = averageFocusScore,
             memo = "타이머 완료"
         )
         _statusText.value = "세션 완료! 공부 시간이 저장되었습니다."
         _focusInsightText.value = "평균 집중도 ${averageFocusScore}점으로 기록되었습니다."
-        _completedSession.value = FocusSessionResult(selectedMinutes, averageFocusScore)
+        _completedSession.value = FocusSessionResult(durationMinutes, averageFocusScore)
     }
 
     private fun createSampleFocusSignal(): FocusSignal {

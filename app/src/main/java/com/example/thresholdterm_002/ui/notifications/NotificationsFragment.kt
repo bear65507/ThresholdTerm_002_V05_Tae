@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.thresholdterm_002.data.local.ProfileStore
-import com.example.thresholdterm_002.data.remote.GoogleMapNavigator
+import com.example.thresholdterm_002.data.remote.KakaoMapNavigator
 import com.example.thresholdterm_002.databinding.FragmentNotificationsBinding
 import com.example.thresholdterm_002.ui.ActivityLauncher
 
@@ -20,7 +20,7 @@ class NotificationsFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var notificationsViewModel: NotificationsViewModel
-    private val mapNavigator = GoogleMapNavigator()
+    private val mapNavigator = KakaoMapNavigator()
     private val profileStore by lazy { ProfileStore(requireContext()) }
 
     override fun onCreateView(

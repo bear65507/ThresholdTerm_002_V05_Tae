@@ -8,7 +8,9 @@ data class UserProfile(
     val eupMyeonDong: String,
     val studentStatus: String
 ) {
-    val regionLabel: String = "$sido $sigungu $eupMyeonDong"
+    val regionLabel: String = listOf(sido, sigungu, eupMyeonDong)
+        .filter { it.isNotBlank() }
+        .joinToString(" ")
 }
 
 class ProfileStore(context: Context) {
@@ -41,7 +43,6 @@ class ProfileStore(context: Context) {
             preferences.getInt(KEY_PROFILE_VERSION, 0) == CURRENT_PROFILE_VERSION &&
             !preferences.getString(KEY_SIDO, null).isNullOrBlank() &&
             !preferences.getString(KEY_SIGUNGU, null).isNullOrBlank() &&
-            !preferences.getString(KEY_EUP_MYEON_DONG, null).isNullOrBlank() &&
             !preferences.getString(KEY_STUDENT_STATUS, null).isNullOrBlank()
     }
 

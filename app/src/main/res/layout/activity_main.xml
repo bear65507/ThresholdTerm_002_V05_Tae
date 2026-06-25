@@ -89,6 +89,20 @@
                 android:text="공부 시간 집계 보기" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_main_subject_stopwatch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="과목별 공부 스톱워치" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_main_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="공부 달력 보기" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_main_library"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

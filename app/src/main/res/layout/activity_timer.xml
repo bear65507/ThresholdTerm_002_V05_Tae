@@ -115,7 +115,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:text="정지" />
+                android:text="일시정지" />
+
+            <Button
+                android:id="@+id/button_timer_activity_save_stop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="저장 종료" />
 
             <Button
                 android:id="@+id/button_timer_activity_reset"

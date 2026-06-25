@@ -138,6 +138,14 @@ class CameraActivity : AppCompatActivity() {
             stopCameraHardware()
         }
 
+        binding.buttonTimerActivitySaveStop.setOnClickListener {
+            if (!viewModel.stopAndSaveFocusSession()) {
+                Toast.makeText(this, "저장할 공부 시간이 아직 없습니다.", Toast.LENGTH_SHORT).show()
+                binding.viewFinder.visibility = View.GONE
+                stopCameraHardware()
+            }
+        }
+
         // 초기화 버튼
         binding.buttonTimerActivityReset.setOnClickListener {
             viewModel.resetFocusSession()
@@ -158,7 +166,7 @@ class CameraActivity : AppCompatActivity() {
             == PackageManager.PERMISSION_GRANTED) {
 
             // 1. 오리지널 타이머 시작 리스너 호출 (DB 및 세션 카운트 작동)
-            viewModel.startFocusSession()
+            viewModel.startFocusSession(useSampleFocusChecks = false)
 
             // 2. 카메라 뷰 창 열기
             binding.viewFinder.visibility = View.VISIBLE
@@ -194,6 +202,7 @@ class CameraActivity : AppCompatActivity() {
                     val feedback = postureAnalyzer.analyzeMediaPipeLandmarks(mockLandmarks, false)
 
                     runOnUiThread {
+                        viewModel.recordAiFocusFeedback(feedback)
                         binding.textTimerActivityFocus.text =
                             "${feedback.title} (${feedback.score}점)\n${feedback.message}"
                     }

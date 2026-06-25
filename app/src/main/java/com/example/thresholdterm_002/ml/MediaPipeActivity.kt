@@ -94,7 +94,7 @@ class MediaPipeActivity : AppCompatActivity() {
         ).filter { it.isNotBlank() }.joinToString(" ")
 
         val studentStatus = intent.getStringExtra(IntentExtras.EXTRA_STUDENT_STATUS).orEmpty()
-        val sourceScreen = intent.getStringExtra("EXTRA_LAUNCHER_FROM").orEmpty()
+        val sourceScreen = intent.getStringExtra(IntentExtras.EXTRA_SOURCE_SCREEN).orEmpty()
 
         binding.textTimerProfile.text = "전달받은 정보: $region / $studentStatus / 출발 화면: $sourceScreen"
     }
@@ -128,7 +128,7 @@ class MediaPipeActivity : AppCompatActivity() {
 
         binding.buttonTimerActivityStart.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                viewModel.startFocusSession()
+                viewModel.startFocusSession(useSampleFocusChecks = false)
                 binding.viewFinder.visibility = View.VISIBLE
                 startCameraStream()
             } else {
@@ -140,6 +140,14 @@ class MediaPipeActivity : AppCompatActivity() {
             viewModel.pauseFocusSession()
             binding.viewFinder.visibility = View.GONE
             stopCameraHardware()
+        }
+
+        binding.buttonTimerActivitySaveStop.setOnClickListener {
+            if (!viewModel.stopAndSaveFocusSession()) {
+                Toast.makeText(this, "저장할 공부 시간이 아직 없습니다.", Toast.LENGTH_SHORT).show()
+                binding.viewFinder.visibility = View.GONE
+                stopCameraHardware()
+            }
         }
 
         binding.buttonTimerActivityReset.setOnClickListener {
@@ -218,6 +226,7 @@ class MediaPipeActivity : AppCompatActivity() {
         val feedback = postureAnalyzer.analyzeMediaPipeLandmarks(parsedLandmarks, false)
 
         runOnUiThread {
+            viewModel.recordAiFocusFeedback(feedback)
             binding.textTimerActivityFocus.text =
                 "${feedback.title} (${feedback.score}점)\n${feedback.message}"
         }

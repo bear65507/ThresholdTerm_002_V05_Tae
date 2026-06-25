@@ -16,10 +16,12 @@ import com.example.thresholdterm_002.data.local.ProfileStore
 import com.example.thresholdterm_002.data.local.UserProfile
 import com.example.thresholdterm_002.databinding.ActivityMainBinding
 import com.example.thresholdterm_002.ui.ActivityLauncher
+import com.example.thresholdterm_002.ui.calendar.StudyCalendarActivity
 import com.example.thresholdterm_002.ui.exam.ExamDownloadActivity
 import com.example.thresholdterm_002.ui.library.LibraryActivity
 import com.example.thresholdterm_002.ui.stats.StatsActivity
 import com.example.thresholdterm_002.ml.MediaPipeActivity
+import com.example.thresholdterm_002.ui.subject.SubjectStopwatchActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -102,6 +104,12 @@ class MainActivity : AppCompatActivity() {
         binding.buttonMainStats.setOnClickListener {
             startActivity(ActivityLauncher.createIntent(this, StatsActivity::class.java, "메인 허브"))
         }
+        binding.buttonMainSubjectStopwatch.setOnClickListener {
+            startActivity(ActivityLauncher.createIntent(this, SubjectStopwatchActivity::class.java, "메인 허브"))
+        }
+        binding.buttonMainCalendar.setOnClickListener {
+            startActivity(ActivityLauncher.createIntent(this, StudyCalendarActivity::class.java, "메인 허브"))
+        }
         binding.buttonMainLibrary.setOnClickListener {
             startActivity(ActivityLauncher.createIntent(this, LibraryActivity::class.java, "메인 허브"))
         }
@@ -138,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         val eupMyeonDong = binding.eupMyeonDongInput.text.toString().trim()
         val studentStatus = binding.studentStatusInput.text.toString().trim()
 
-        if (sido.isBlank() || sigungu.isBlank() || eupMyeonDong.isBlank() || studentStatus.isBlank()) {
+        if (sido.isBlank() || sigungu.isBlank() || studentStatus.isBlank()) {
             Toast.makeText(this, R.string.profile_required_message, Toast.LENGTH_SHORT).show()
             return
         }

@@ -73,6 +73,11 @@ class TimerActivity : AppCompatActivity() {
         binding.buttonTimerActivityPause.setOnClickListener {
             viewModel.pauseFocusSession()
         }
+        binding.buttonTimerActivitySaveStop.setOnClickListener {
+            if (!viewModel.stopAndSaveFocusSession()) {
+                Toast.makeText(this, "저장할 공부 시간이 아직 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
         binding.buttonTimerActivityReset.setOnClickListener {
             viewModel.resetFocusSession()
         }

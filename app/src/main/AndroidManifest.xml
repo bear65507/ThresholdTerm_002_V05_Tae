@@ -56,6 +56,16 @@
             android:label="도서관 검색" />
 
         <activity
+            android:name=".ui.subject.SubjectStopwatchActivity"
+            android:exported="false"
+            android:label="과목별 공부 기록" />
+
+        <activity
+            android:name=".ui.calendar.StudyCalendarActivity"
+            android:exported="false"
+            android:label="공부 달력" />
+
+        <activity
             android:name=".ui.exam.ExamDownloadActivity"
             android:exported="false"
             android:label="기출문제 다운로드" />
